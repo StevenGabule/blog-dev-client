@@ -1,0 +1,41 @@
+@import url('./profile.css');
+@import url('./category.css');
+@import url('./home.css');
+@import url('./blogs_category.css');
+
+.pass {
+    position: relative;
+}
+
+.pass small {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.errMsg{
+    background: rgb(214, 10, 10);
+    color: #fff9;
+    text-align: center;
+    padding: 10px 0;
+    letter-spacing: 1.3px;
+}
+
+.successMsg{
+    background: rgb(9, 158, 54);
+    color: #fff9;
+    text-align: center;
+    padding: 10px 0;
+    letter-spacing: 1.3px;
+}
+
+.avatar{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    transform: translateY(-3px);
+    border-radius: 50%;
+}
