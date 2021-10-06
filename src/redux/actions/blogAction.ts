@@ -3,7 +3,11 @@ import {IBlog} from '../../utils/Types'
 import {imageUpload} from '../../utils/imageUpload'
 import {ALERT, IAlertType} from '../types/alertType'
 import {postAPI, getAPI} from '../../utils/FetchData'
-import {GET_HOME_BLOGS, IGetHomeBlogsType, GET_BLOGS_CATEGORY_ID, IGetBlogsCategoryType} from '../types/blogType'
+import {
+  GET_HOME_BLOGS, IGetHomeBlogsType, GET_BLOGS_CATEGORY_ID, IGetBlogsCategoryType,
+  GET_BLOGS_USER_ID,
+  IGetBlogsUserType
+} from '../types/blogType'
 
 export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispatch<IAlertType>) => {
   let url;
@@ -18,7 +22,7 @@ export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispa
     }
 
     const newBlog = {...blog, thumbnail: url}
-    const res = await postAPI('blog', newBlog, token)
+    const res = await postAPI('blogs', newBlog, token)
     console.log(res)
 
     dispatch({type: ALERT, payload: {loading: false}})
@@ -30,7 +34,7 @@ export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispa
 export const getHomeBlogs = () => async (dispatch: Dispatch<IAlertType | IGetHomeBlogsType>) => {
   try {
     dispatch({type: ALERT, payload: {loading: true}})
-    const res = await getAPI('blog/home/posts')
+    const res = await getAPI('blogs/home/posts')
     dispatch({
       type: GET_HOME_BLOGS,
       payload: res.data
@@ -46,9 +50,25 @@ export const getBlogsByCategoryId = (id: string, search: string) => async (dispa
     let limit = 8;
     let value = search ? search : `?page=${1}`;
     dispatch({type: ALERT, payload: {loading: true}})
-    const res: any = await getAPI(`blog/${id}${value}&limit=${limit}`)
+    const res: any = await getAPI(`blogs/category/${id}${value}&limit=${limit}`)
     dispatch({
       type: GET_BLOGS_CATEGORY_ID,
+      payload: {...res.data, id, search}
+    })
+    dispatch({type: ALERT, payload: {loading: false}})
+  } catch (err: any) {
+    dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
+  }
+}
+
+export const getBlogsByUserId = (id: string, search: string) => async (dispatch: Dispatch<IAlertType | IGetBlogsUserType>) => {
+  try {
+    let limit = 3;
+    let value = search ? search : `?page=${1}`;
+    dispatch({type: ALERT, payload: {loading: true}})
+    const res: any = await getAPI(`blogs/user/${id}${value}&limit=${limit}`)
+    dispatch({
+      type: GET_BLOGS_USER_ID,
       payload: {...res.data, id, search}
     })
     dispatch({type: ALERT, payload: {loading: false}})

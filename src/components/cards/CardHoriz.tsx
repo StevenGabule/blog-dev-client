@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
-import { IBlog } from '../../utils/Types'
+import {IBlog} from '../../utils/Types'
 
 interface IProps {
   blog: IBlog
@@ -13,14 +13,16 @@ const CardHoriz: React.FC<IProps> = ({blog}) => {
       <div className="row g-0 p-2">
         <div className="col-md-4" style={{minHeight: '150px', maxHeight: '170px', overflow: 'hidden'}}>
           {blog.thumbnail && <> {
-                typeof(blog.thumbnail) === 'string' ? <Link to={`/blog/${blog._id}`}>
-                    <img src={blog.thumbnail}
-                         className="w-100 h-100"
-                         alt="thumbnail" style={{objectFit: 'cover'}} />
-                  </Link> : <img src={URL.createObjectURL(blog.thumbnail)} className="w-100 h-100"
-                        alt="thumbnail" style={{objectFit: 'cover'}} />
-              }
-            </>
+            typeof (blog.thumbnail) === 'string' ? <Link to={`/blog/${blog._id}`}
+                                                         className="text-capitalize text-decoration-none">
+                <img src={blog.thumbnail} className="w-100 h-100" alt="thumbnail" style={{objectFit: 'cover'}}/>
+              </Link> :
+              <img src={URL.createObjectURL(blog.thumbnail)}
+                   className="w-100 h-100"
+                   alt="thumbnail"
+                   style={{objectFit: 'cover'}}/>
+          }
+          </>
           }
         </div>
 

@@ -5,7 +5,7 @@ import { RootStore, InputChange, IUserProfile, FormSubmit } from '../../utils/Ty
 
 import NotFound from '../global/NotFound'
 
-import { updateUser, resetPassword } from '../../redux/actions/profileAction'
+import { updateUser, resetPassword } from '../../redux/actions/userAction'
 
 const INITIAL_VALUE = { name: '', account: '', avatar: '', password: '', cf_password: ''  }
 
