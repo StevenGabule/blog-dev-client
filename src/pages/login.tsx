@@ -13,7 +13,10 @@ const Login = () => {
   const { auth } = useSelector((state: RootStore) => state)
 
   useEffect(() => {
-    if(auth.access_token) history.push('/')
+    if(auth.access_token) {
+      let url = history.location.search.replace('?', '/')
+      return history.push(url)
+    }
   },[auth.access_token, history])
 
   return (
@@ -33,7 +36,7 @@ const Login = () => {
             </span>
           </small>
           <p className={'text-muted mt-4 text-center'}>
-            You don't have an account? <Link to={'/register'} className={'text-decoration-none'}>Register now</Link>
+            You don't have an account? <Link to={`/register${history.location.search}`} className={'text-decoration-none'}>Register now</Link>
           </p>
         </div>
       </div>

@@ -52,8 +52,8 @@ export const logout = () =>
   async (dispatch: Dispatch<IAuthType | IAlertType>) => {
     try {
       localStorage.removeItem('logged')
+      dispatch({ type: AUTH, payload: { } })
       await getAPI('auth/logout')
-      window.location.href = "/"
     } catch (err: any) {
       dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
     }
@@ -63,14 +63,10 @@ export const googleLogin = (id_token: string) =>
   async (dispatch: Dispatch<IAuthType | IAlertType>) => {
     try {
       dispatch({type: ALERT, payload: {loading: true}})
-
       const res: any = await postAPI('auth/google_login', {id_token})
-
       dispatch({type: AUTH, payload: res.data})
-
       dispatch({type: ALERT, payload: {success: res.data.msg}})
       localStorage.setItem('logged', 'devat-channel')
-
     } catch (err: any) {
       dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
     }
@@ -80,14 +76,10 @@ export const facebookLogin = (accessToken: string, userID: string) =>
   async (dispatch: Dispatch<IAuthType | IAlertType>) => {
     try {
       dispatch({type: ALERT, payload: {loading: true}})
-
       const res: any = await postAPI('auth/facebook_login', {accessToken, userID})
-
       dispatch({type: AUTH, payload: res.data})
-
       dispatch({type: ALERT, payload: {success: res.data.msg}})
       localStorage.setItem('logged', 'devat-channel')
-
     } catch (err: any) {
       dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
     }
