@@ -45,12 +45,12 @@ const UserBlogs = () => {
 
   if(!blogs) return <Loading />;
 
-  if(blogs.length === 0) return(<h3 className="text-center">No Blogs</h3>)
+  if(blogs.length === 0 && total < 1) return(<h3 className="text-center">No Blogs</h3>)
 
   return (
     <div>
       <div>{blogs.map(blog => (<CardHoriz key={blog._id} blog={blog} />))}</div>
-      <div>{total > 1 && <Pagination total={total} callback={handlePagination} />}</div>
+      <div><Pagination total={total} callback={handlePagination} /></div>
     </div>
   )
 }

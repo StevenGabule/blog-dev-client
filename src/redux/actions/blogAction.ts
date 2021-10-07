@@ -2,14 +2,21 @@ import {Dispatch} from 'redux'
 import {IBlog} from '../../utils/Types'
 import {imageUpload} from '../../utils/imageUpload'
 import {ALERT, IAlertType} from '../types/alertType'
-import {postAPI, getAPI} from '../../utils/FetchData'
+import {postAPI, getAPI, putAPI, deleteAPI} from '../../utils/FetchData'
 import {
-  GET_HOME_BLOGS, IGetHomeBlogsType, GET_BLOGS_CATEGORY_ID, IGetBlogsCategoryType,
+  GET_HOME_BLOGS,
+  GET_BLOGS_CATEGORY_ID,
   GET_BLOGS_USER_ID,
-  IGetBlogsUserType
+  CREATE_BLOGS_USER_ID,
+  DELETE_BLOGS_USER_ID,
+  IGetHomeBlogsType,
+  IGetBlogsCategoryType,
+  IGetBlogsUserType,
+  ICreateBlogsUserType,
+  IDeleteBlogsUserType
 } from '../types/blogType'
 
-export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispatch<IAlertType>) => {
+export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispatch<IAlertType | ICreateBlogsUserType>) => {
   let url;
   try {
     dispatch({type: ALERT, payload: {loading: true}})
@@ -22,9 +29,9 @@ export const createBlog = (blog: IBlog, token: string) => async (dispatch: Dispa
     }
 
     const newBlog = {...blog, thumbnail: url}
-    const res = await postAPI('blogs', newBlog, token)
-    console.log(res)
+    const res: any = await postAPI('blogs', newBlog, token)
 
+    dispatch({type: CREATE_BLOGS_USER_ID, payload: res.data})
     dispatch({type: ALERT, payload: {loading: false}})
   } catch (err: any) {
     dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
@@ -72,6 +79,34 @@ export const getBlogsByUserId = (id: string, search: string) => async (dispatch:
       payload: {...res.data, id, search}
     })
     dispatch({type: ALERT, payload: {loading: false}})
+  } catch (err: any) {
+    dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
+  }
+}
+
+export const updateBlog = (blog: IBlog, token: string) =>
+  async (dispatch: Dispatch<IAlertType>) => {
+    let url;
+    try {
+      dispatch({type: ALERT, payload: {loading: true}})
+      if (typeof (blog.thumbnail) !== 'string') {
+        const photo = await imageUpload(blog.thumbnail)
+        url = photo.url
+      } else {
+        url = blog.thumbnail
+      }
+      const newBlog = {...blog, thumbnail: url}
+      const res: any = await putAPI(`blog/${newBlog._id}`, newBlog, token)
+      dispatch({type: ALERT, payload: {success: res.data.msg}})
+    } catch (err: any) {
+      dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
+    }
+  }
+
+export const deleteBlog = (blog: IBlog, token: string) => async (dispatch: Dispatch<IAlertType | IDeleteBlogsUserType>) => {
+  try {
+    dispatch({type: DELETE_BLOGS_USER_ID, payload: blog})
+    await deleteAPI(`blog/${blog._id}`, token)
   } catch (err: any) {
     dispatch({type: ALERT, payload: {errors: err.response.data.msg}})
   }

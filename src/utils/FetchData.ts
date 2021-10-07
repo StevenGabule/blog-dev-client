@@ -17,6 +17,12 @@ export const patchAPI = async (url: string, post: object, token?: string) => {
   });
 }
 
+export const putAPI = async (url: string, post: object, token?:string) => {
+  return await axios.put(`/api/${url}`, post, {
+    headers: {Authorization: `Bearer ${token}` || ""}
+  });
+}
+
 export const deleteAPI = async (url: string, token?: string) => {
   return await axios.delete(`/api/${url}`, {
     headers: {Authorization: `Bearer ${token}` || ""}
